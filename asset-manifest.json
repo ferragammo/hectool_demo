@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/rental-front/static/css/main.452e8ce6.css",
-    "main.js": "/rental-front/static/js/main.b19702cb.js",
-    "index.html": "/rental-front/index.html",
-    "main.452e8ce6.css.map": "/rental-front/static/css/main.452e8ce6.css.map",
-    "main.b19702cb.js.map": "/rental-front/static/js/main.b19702cb.js.map"
+    "main.css": "/hectool_demo/static/css/main.452e8ce6.css",
+    "main.js": "/hectool_demo/static/js/main.8da1af78.js",
+    "index.html": "/hectool_demo/index.html",
+    "main.452e8ce6.css.map": "/hectool_demo/static/css/main.452e8ce6.css.map",
+    "main.8da1af78.js.map": "/hectool_demo/static/js/main.8da1af78.js.map"
   },
   "entrypoints": [
     "static/css/main.452e8ce6.css",
-    "static/js/main.b19702cb.js"
+    "static/js/main.8da1af78.js"
   ]
 }
