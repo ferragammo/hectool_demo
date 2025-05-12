@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/rental-front/static/css/main.452e8ce6.css",
+    "main.js": "/rental-front/static/js/main.82be7101.js",
+    "index.html": "/rental-front/index.html",
+    "main.452e8ce6.css.map": "/rental-front/static/css/main.452e8ce6.css.map",
+    "main.82be7101.js.map": "/rental-front/static/js/main.82be7101.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.452e8ce6.css",
+    "static/js/main.82be7101.js"
+  ]
+}
