@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/hectool_demo/static/css/main.452e8ce6.css",
-    "main.js": "/hectool_demo/static/js/main.8da1af78.js",
+    "main.js": "/hectool_demo/static/js/main.034881a8.js",
     "index.html": "/hectool_demo/index.html",
     "main.452e8ce6.css.map": "/hectool_demo/static/css/main.452e8ce6.css.map",
-    "main.8da1af78.js.map": "/hectool_demo/static/js/main.8da1af78.js.map"
+    "main.034881a8.js.map": "/hectool_demo/static/js/main.034881a8.js.map"
   },
   "entrypoints": [
     "static/css/main.452e8ce6.css",
-    "static/js/main.8da1af78.js"
+    "static/js/main.034881a8.js"
   ]
 }
