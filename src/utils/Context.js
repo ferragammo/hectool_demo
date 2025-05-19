@@ -1,9 +1,6 @@
 import { createContext, useEffect, useRef, useState } from "react";
 import { ChatModelType } from "../static/enums/ChatModelType";
-import {
-   createMessage,
-   getAllChatMessages,
-} from "../api/messageApi";
+import { createMessage, getAllChatMessages } from "../api/messageApi";
 import { createChat, getChatById, getChats } from "../api/chatApi";
 
 export const ContextApp = createContext();
@@ -36,39 +33,61 @@ const AppContext = ({ children }) => {
       setIsLoading(true);
 
       setMessage((prevMessages) => [...prevMessages, { text, isBot: false }]);
+   
+      let fullBotText = "";
+      let finalTextAfterPause = "";
+      let pauseSeen = false;
+   
+      const updateBotMessage = (text) => {
+         setMessage((prev) => {
+            const last = prev[prev.length - 1];
+      
+            if (last?.isBot && !last.file) {
+               return [...prev.slice(0, -1), { ...last, text }];
+            } else {
+               return [...prev, { text, isBot: true }];
+            }
+         });
+      };
+   
+      const handleChunk = (chunk) => {
+         fullBotText += chunk;
 
-      if (!selectedChat) {
-         try {
+         if (chunk.includes("{PAUSE}")) {
+            pauseSeen = true;
+         }
+
+         const temp = fullBotText.split("{PAUSE}");
+         if (pauseSeen && temp[temp.length - 1].trim()) {
+            finalTextAfterPause = temp[temp.length - 1];
+            updateBotMessage(finalTextAfterPause);
+         } else {
+            const displayText = fullBotText.replace(/{PAUSE}/g, "");
+            updateBotMessage(displayText);
+         }
+      };
+   
+      try {
+         if (!selectedChat) {
             const newChat = await createChat();
             if (newChat) {
                setSelectedChat(newChat.data.id);
-               const responseMessage = await createMessage(
-                  newChat.data.id,
-                  text
-               );
-               console.log(responseMessage)
-               setMessage((prevMessages) => [
-                  ...prevMessages,
-                  { text: responseMessage.text, isBot: true },
-               ]);
+               await createMessage(newChat.data.id, text, handleChunk);
             } else {
-               console.error("Failed to create a new chat");
+               console.error("Failed to create new chat");
             }
-         } catch (error) {
-            console.error("Error creating new chat:", error);
+            getAllChats();
+         } else {
+            await createMessage(selectedChat, text, handleChunk);
          }
-         getAllChats();
-      } else {
-         const responseMessage = await createMessage(selectedChat, text);
-         setMessage((prevMessages) => [
-            ...prevMessages,
-            { text: responseMessage.text, isBot: true },
-         ]);
+      } catch (err) {
+         console.error("handleSend error:", err);
       }
+   
       setIsLoading(false);
    };
-
-
+   
+   
 
    const handleKeyPress = (e) => {
       if (!isLoading) {
@@ -81,7 +100,6 @@ const AppContext = ({ children }) => {
    };
 
    const loadChatMessages = async (chatId) => {
-
       if (chatId) {
          const result = await getAllChatMessages(chatId);
          console.log(result);
@@ -104,7 +122,6 @@ const AppContext = ({ children }) => {
 
    const selectedChatById = async (chatId) => {
       try {
-    
          const chat = await getChatById(chatId);
          if (chat) {
             setSelectedChat(chatId);
@@ -117,7 +134,6 @@ const AppContext = ({ children }) => {
 
    const getAllChats = async () => {
       try {
-        
          const response = await getChats(0, 10);
          if (response.data) {
             setChats(response.data);
@@ -137,28 +153,28 @@ const AppContext = ({ children }) => {
       <ContextApp.Provider
          value={{
             showSlide,
-                setShowSlide,
-                Mobile,
-                setMobile,
-                chatValue,
-                setChatValue,
-                handleSend,
-                message,
-                setMessage,
-                chats,
-                msgEnd,
-                handleKeyPress,
-                loadChatMessages,
-                selectedModel,
-                setSelectedModel,
-                setSelectedChat,
-                selectedChat,
-                selectedChatById,
-                setFileData,
-                getAllChats,
-                setChats,
-                fileData,
-                isLoading
+            setShowSlide,
+            Mobile,
+            setMobile,
+            chatValue,
+            setChatValue,
+            handleSend,
+            message,
+            setMessage,
+            chats,
+            msgEnd,
+            handleKeyPress,
+            loadChatMessages,
+            selectedModel,
+            setSelectedModel,
+            setSelectedChat,
+            selectedChat,
+            selectedChatById,
+            setFileData,
+            getAllChats,
+            setChats,
+            fileData,
+            isLoading,
          }}
       >
          {children}
